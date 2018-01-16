@@ -31,22 +31,16 @@ gulp.task('eslint', function() {
  */
 gulp.task('build-js', ['eslint'], function() {
   var compilerOptions = {
-    modules: 'common',
-    moduleIds: false,
-    comments: false,
-    compact: false,
-    stage: 2,
-    optional: ["es7.decorators", "es7.classProperties"]
+    plugins: ["transform-decorators-legacy", "transform-class-properties"]
   };
   return gulp.src('src/**/*.js')
     .pipe(plumber())
     .pipe(changed('dist/', { extension: '.js' }))
     .pipe(sourcemaps.init())
-    .pipe(babel())
+    .pipe(babel(compilerOptions))
     .pipe(sourcemaps.write({ includeContent: false, sourceRoot: '/src/' }))
     .pipe(gulp.dest('dist/'));
 });
-
 
 /*
   Task to clean and build the entire library
