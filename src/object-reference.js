@@ -104,6 +104,8 @@ export class ObjectReference {
 
   publish(newValue) {
     this.value = newValue;
+    // TODO possibly shhould handle errors here?  Or handle upstream?
+    // TODO log errors if newValue.errors
     return Promise.all(this.consumers.map(consumer => {
       // TODO Possibly the return value of the consumer can indicate if the
       // subscription should be cancelled?

@@ -1,9 +1,6 @@
-// You must supply an esb with ioChannel defined (TODO Finish documenting this requirement)
-import { ioChannel } from 'esb/esb';
+import { ioChannel } from './esb/esb';
 
 import { ObjectReference } from './object-reference';
-import { TypeRegistry } from './type-registry';
-
 
 export class ZenSpaces {
   constructor() {

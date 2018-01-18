@@ -1,10 +1,13 @@
 import { ZenSpaces } from './zen-spaces';
+import { ActionFactory } from './action-factory';
+
 import { inject } from 'aurelia-framework';
 
-@inject(ZenSpaces)
+@inject(ZenSpaces, ActionFactory)
 export class TypeRegistry {
-  constructor(spaces) {
+  constructor(spaces, actionFactory) {
     this.spaces = spaces;
+    this.actionFactory = actionFactory;
     this.typeRefs = new Map();
   }
 
@@ -17,6 +20,12 @@ export class TypeRegistry {
             name
             elements { name defaultValue type }
             properties { name value }
+            actions {
+              name
+              operator
+              preConditions
+              eventType
+            }
           }
         }
       }`;
@@ -40,15 +49,27 @@ export class TypeRegistry {
     let objRef = this.resolve(typeName);
     let binding = objRef.bind(viewModel, {
       translate: (newValue, model, binding) => {
-        model.type = newValue.data.types.children[0];
-        model.create = () => {
-          // Create a new object based on this type
-          let newObject = { _type: model.type };
-          model.type.elements.forEach((element) => {
-            newObject[element.name] = element.defaultValue;
+        if (newValue.errors) {
+          // TODO This should be done upstream
+          console.error(newValue.errors);
+        }
+        else {
+          model.type = newValue.data.types.children[0];
+          model.create = () => {
+            // Create a new object based on this type
+            let newObject = { _type: model.type };
+            model.type.elements.forEach((element) => {
+              newObject[element.name] = element.defaultValue;
+            });
+            return newObject;
+          };
+          // TODO Could be handy if actions were indexed
+          model.actions = [];
+          model.collectionType.actions.forEach((actionData) => {
+            let action = this.actionFactory.create(actionData, viewModel);
+            model.actions.push(action);
           });
-          return newObject;
-        };
+        }
       }
     });
     objRef.push();
