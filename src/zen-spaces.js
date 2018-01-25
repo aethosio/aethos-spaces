@@ -1,10 +1,18 @@
 import { ioChannel } from './esb/esb';
-
+import { TypeRegistry } from './type-registry';
+import { OperatorRegistry } from './operator-registry';
+import { ActionFactory } from './action-factory';
 import { ObjectReference } from './object-reference';
+import { CollectionRegistry } from './collection-registry';
+
+let $zenSpacesInstance = null;
 
 export class ZenSpaces {
   constructor() {
-    console.log('Constructed ZenSpaces object (should be singleton!');
+    if ($zenSpacesInstance) {
+      throw new Error('Attempting to construct another ZenSpaces (should be a singleton!');
+    }
+    $zenSpacesInstance = this;
     this.connected = false;
     this.objectRefs = [];
     this.subscriptions = new Map();
@@ -26,6 +34,11 @@ export class ZenSpaces {
       });
     this.api.on('event', this.onEvent.bind(this));
     this.api.on('publish', this.publish.bind(this));
+
+    this.operatorRegistry = new OperatorRegistry();
+    this.typeRegistry = new TypeRegistry(this);
+    this.actionFactory = new ActionFactory(this);
+    this.collectionRegistry = new CollectionRegistry(this);
   }
 
   handShake() {

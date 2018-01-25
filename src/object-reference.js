@@ -1,3 +1,8 @@
+/**
+ * Binding disposable returned from ObjectReference#bind()
+ *
+ * Call `dispose` on this when the binding is no longer required, otherwise
+ */
 class ObjRefBinding {
   constructor(viewModel, params, objRef) {
     this.viewModel = viewModel;
@@ -10,6 +15,11 @@ class ObjRefBinding {
     this.objRef.disposeBinding(this);
   }
 
+  /**
+   * Subscribe to update notifications.
+   *
+   * @param {function} func - Function that is executed when a Spaces object has been modified.
+   */
   subsribe(func) {
     this.consumers.push(func);
   }
@@ -43,8 +53,8 @@ export class ObjectReference {
    * @param {Object} [params] - Eventually should including mapping instructions, but the
    *          should be ok for now.
    *
-   * @return {ObjRefBinding} disposable publisher, which should be used to dispose of the binding and used to
-   *  subscribe to
+   * @return {ObjRefBinding} disposable publisher, which must be used to dispose of the binding and used to
+   *  subscribe to update notifications.
    */
   bind(viewModel, params) {
     // TODO Create a Binding class

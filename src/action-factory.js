@@ -1,13 +1,25 @@
-import { OperatorRegistry } from './operator-registry';
-import { TypeRegistry } from './type-registry';
-
-import { inject } from 'aurelia-framework';
-
-@inject(OperatorRegistry, TypeRegistry)
+/**
+ * Action Factory
+ * 
+ * Constructs Action objects that are bound to an Operator.
+ * 
+ */
 export class ActionFactory {
-  constructor(ops, typeRegistry) {
-    this.ops = ops;
-    this.typeRegistry = typeRegistry;
+  /**
+   * Use ZenSpaces#actionFactory
+   * 
+   * @private
+   */
+  constructor(spaces) {
+    this.spaces = spaces;
+  }
+
+  get ops() {
+    return this.spaces.operatorRegistry;
+  }
+
+  get typeRegistry() {
+    return this.spaces.typeRegistry;
   }
 
   create(actionData, container) {

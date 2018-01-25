@@ -1,4 +1,10 @@
+/**
+ * Operator base class.  Derive from this to implement your own operators.
+ */
 export class Operator {
+  /**
+   * Normally this is created indirectly through `ActionFactory#create()` after registering actions and operators.
+   */
   constructor(viewModel) {
     this.viewModel = viewModel;
     this.spaces = viewModel.spaces;

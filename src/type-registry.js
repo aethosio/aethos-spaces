@@ -1,14 +1,21 @@
-import { ZenSpaces } from './zen-spaces';
-import { ActionFactory } from './action-factory';
-
-import { inject } from 'aurelia-framework';
-
-@inject(ZenSpaces, ActionFactory)
+/**
+ * Type Registry
+ *
+ * Contains the type definitions / meta data of types in the Zen Spaces database.
+ *
+ */
 export class TypeRegistry {
+  /**
+   * Use `ZenSpaces#typeRegistry` to get the singleton instance of this registry.
+   * @private
+   */
   constructor(spaces, actionFactory) {
     this.spaces = spaces;
-    this.actionFactory = actionFactory;
     this.typeRefs = new Map();
+  }
+
+  get actionFactory() {
+    return this.spaces.actionFactory;
   }
 
   resolve(typeName) {
@@ -65,7 +72,7 @@ export class TypeRegistry {
           };
           // TODO Could be handy if actions were indexed
           model.actions = [];
-          model.collectionType.actions.forEach((actionData) => {
+          model.type.actions.forEach((actionData) => {
             let action = this.actionFactory.create(actionData, viewModel);
             model.actions.push(action);
           });

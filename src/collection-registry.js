@@ -1,15 +1,21 @@
-import { ZenSpaces } from './zen-spaces';
-import { TypeRegistry } from './type-registry';
-
-import { inject } from 'aurelia-framework';
-
-
-@inject(ZenSpaces, TypeRegistry)
+/**
+ * Collection Registry
+ *
+ * Use this singleton to bind a Zen Spaces collection to a view model.
+ */
 export class CollectionRegistry {
-  constructor(spaces, typeRegistry) {
+  /**
+   * This singleton is accessed via `ZenSpaces#collectionRegistry`.
+   *
+   * @private
+   */
+  constructor(spaces) {
     this.spaces = spaces;
-    this.typeRegistry = typeRegistry;
     this.objRefs = new Map();
+  }
+
+  get typeRegistry() {
+    return this.spaces.typeRegistry;
   }
 
   resolve(collectionName) {

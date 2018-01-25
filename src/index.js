@@ -1,10 +1,7 @@
-export { ObjectReference } from 'aethos-spaces/object-reference';
-export { ZenSpaces } from 'aethos-spaces/zen-spaces';
-export { TypeRegistry } from 'aethos-spaces/type-registry';
-export { Operator } from 'aethos-spaces/operators/operator';
-export { OperatorRegistry } from 'aethos-spaces/operator-registry';
-export { CollectionRegistry } from 'aethos-spaces/collection-registry';
+export { ZenSpaces } from './zen-spaces';
+export { Operator } from './operators/operator';
 
 export function configure(aurelia) {
-
+  console.log('Configuring plugins aethos-spaces');
+  console.log(aurelia);
 }
