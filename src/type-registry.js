@@ -62,6 +62,9 @@ export class TypeRegistry {
         }
         else {
           model.type = newValue.data.types.children[0];
+          if (!model.type) {
+            console.log(`Cannot find type ${typeName}`);
+          }
           model.create = () => {
             // Create a new object based on this type
             let newObject = { _type: model.type };
@@ -70,12 +73,13 @@ export class TypeRegistry {
             });
             return newObject;
           };
-          // TODO Could be handy if actions were indexed
-          model.actions = [];
-          model.type.actions.forEach((actionData) => {
-            let action = this.actionFactory.create(actionData, viewModel);
-            model.actions.push(action);
-          });
+          model.actions = new Map();
+          if (model.type && model.type.actions) {
+            model.type.actions.forEach((actionData) => {
+              let action = this.actionFactory.create(actionData, viewModel);
+              model.actions.set(action.operatorName, action);
+            });
+          }
         }
       }
     });
