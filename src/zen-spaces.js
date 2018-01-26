@@ -98,7 +98,13 @@ export class ZenSpaces {
     return uri;
   }
 
-  createEvent(event) {
+  createEvent(eventData) {
+    let event = {
+      eventType: eventData._type.name,
+      data: eventData
+    };
+    delete event.data._type;
+    // TODO support target
     this.api.emit('event', event, res => {
       // console.log('Got results from Zen Spaces createEvent');
       // console.log(res);

@@ -18,9 +18,10 @@ export class CollectionRegistry {
     return this.spaces.typeRegistry;
   }
 
-  resolve(collectionName) {
+  resolve(collectionName, fields) {
     if (!this.objRefs.has(collectionName)) {
-      let query = `{ ${collectionName} { type children { name } } }`;
+      fields = fields || 'name';
+      let query = `{ ${collectionName} { type children { ${fields} } } }`;
       let objRef = this.spaces.resolve({ query });
       this.objRefs.set(collectionName, objRef);
       return objRef;
@@ -28,8 +29,16 @@ export class CollectionRegistry {
     return this.objRefs.get(collectionName);
   }
 
-  bind(viewModel, collectionName) {
-    let objRef = this.resolve(collectionName);
+  /**
+   * @param {string} fields partial graphQL query identifying which fields within
+   *  the children of this collection should be bound.
+   *
+   * TODO ObjectReference.bind also supports a params object; fields should probably
+   * be incorporated with that so as to have a way to support translation, mapping,
+   * etc instead of just support a list of field names.
+   */
+  bind(viewModel, collectionName, fields) {
+    let objRef = this.resolve(collectionName, fields);
     let binding = objRef.bind(viewModel, {
       translate: (newValue, model, binding) => {
         if (newValue.errors) {
