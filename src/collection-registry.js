@@ -30,6 +30,10 @@ export class CollectionRegistry {
   }
 
   /**
+   * Bind a collection to a view model.
+   *
+   * @param {object} viewModel target for the binding
+   * @param {string} collectionName name of the collection to bind
    * @param {string} fields partial graphQL query identifying which fields within
    *  the children of this collection should be bound.
    *

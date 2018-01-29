@@ -50,8 +50,12 @@ export class TypeRegistry {
     return this.resolve(typeName).get();
   }
 
-  // TODO This is actually binding to a factory and not the type, which sucks
-  // if you need the type.
+  /**
+   * Bind a viewModel to the specified type.
+   *
+   * @param {object} viewModel target of the bind
+   * @param {string} typeName name of the type being bound
+   */
   bind(viewModel, typeName) {
     let objRef = this.resolve(typeName);
     let binding = objRef.bind(viewModel, {
@@ -65,11 +69,17 @@ export class TypeRegistry {
           if (!model.type) {
             console.log(`Cannot find type ${typeName}`);
           }
-          model.create = () => {
+          model.create = (newModel) => {
             // Create a new object based on this type
+            newModel = newModel || {};
             let newObject = { _type: model.type };
             model.type.elements.forEach((element) => {
-              newObject[element.name] = element.defaultValue;
+              if (newModel.hasOwnProperty(element.name)) {
+                newObject[element.name] = newModel[element.name];
+              }
+              else {
+                newObject[element.name] = element.defaultValue;
+              }
             });
             return newObject;
           };
