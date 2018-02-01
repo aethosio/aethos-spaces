@@ -55,6 +55,7 @@ export class TypeRegistry {
    *
    * @param {object} viewModel target of the bind
    * @param {string} typeName name of the type being bound
+   * @return {ObjRefBinding} be sure to dispose of this object when finished with the binding.
    */
   bind(viewModel, typeName) {
     let objRef = this.resolve(typeName);
