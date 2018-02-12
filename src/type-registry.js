@@ -84,13 +84,14 @@ export class TypeRegistry {
             });
             return newObject;
           };
-          model.actions = new Map();
+          model.actionMap = new Map();
           if (model.type && model.type.actions) {
             model.type.actions.forEach((actionData) => {
               let action = this.actionFactory.create(actionData, viewModel);
-              model.actions.set(action.operatorName, action);
+              model.actionMap.set(action.operatorName, action);
             });
           }
+          model.actions = Array.from(model.actionMap.values());
         }
       }
     });
