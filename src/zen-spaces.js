@@ -74,6 +74,12 @@ export class ZenSpaces {
     });
   }
 
+  /**
+   * (re) subscribe to all known objects.
+   *
+   * Probably this should be a private method; it's generally only performed
+   * after having been disconnected from Zen Spaces and reconnecting.
+   */
   subscribeAll() {
     this.subscriptions = new Map();
     console.log('Re-subscribing to all');
@@ -81,6 +87,34 @@ export class ZenSpaces {
     this.objectRefs.forEach(objRef => {
       this.subscribe(objRef);
     });
+  }
+
+  /**
+   * Bind a Zen Spaces object to a view model
+   *
+   * @param {Object} viewModel
+   * @param {Object} params
+   * @param {string} params.oid Object Id to bind
+   * @param {string} params.type Type of object to bind; the binding will fail
+   *  if this type is specified and the resulting object is not of the specified
+   *  type.
+   */
+  bind(viewModel, params) {
+    let objRef = this.resolve({ query: `{ objects(oid: "${params.oid}") { elements { key value } } }` });
+    let binding = objRef.bind(viewModel, {
+      translate: (newValue, model, binding) => {
+        if (newValue.errors) {
+          // TODO This should be done upstream
+          console.error(newValue.errors);
+        }
+        else {
+          newValue.data.objects.elements.forEach(({ key, value }) => {
+            model[key] = value;
+          });
+        }
+      }
+    });
+    return binding;
   }
 
   onEvent(event) {
