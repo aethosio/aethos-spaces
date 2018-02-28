@@ -100,7 +100,7 @@ export class ZenSpaces {
    *  type.
    */
   bind(viewModel, params) {
-    let objRef = this.resolve({ query: `{ objects(oid: "${params.oid}") { elements { key value } } }` });
+    let objRef = this.resolve({ oid: params.oid, type: params.type });
     let binding = objRef.bind(viewModel, {
       translate: (newValue, model, binding) => {
         if (newValue.errors) {
@@ -108,9 +108,12 @@ export class ZenSpaces {
           console.error(newValue.errors);
         }
         else {
-          newValue.data.objects.elements.forEach(({ key, value }) => {
-            model[key] = value;
-          });
+          for (const key in newValue) {
+            // Strip out the private members (probably should be stripped on the server)
+            if (key.findIndex('_') !== 0) {
+              viewModel[key] = newValue[key];
+            }
+          }
         }
       }
     });
