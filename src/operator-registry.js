@@ -36,6 +36,6 @@ export class OperatorRegistry {
    * @param {object} viewModel - must have a public member `spaces` that returns the Zen Spaces connection instance.
    */
   create(operatorName, viewModel) {
-    return new this.operators.get(operatorName)(viewModel);
+    return new (this.operators.get(operatorName))(viewModel);
   }
 }
