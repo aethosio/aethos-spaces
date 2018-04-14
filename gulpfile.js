@@ -31,7 +31,18 @@ gulp.task('eslint', function() {
  */
 gulp.task('build-js', ['eslint'], function() {
   var compilerOptions = {
-    plugins: ["transform-decorators-legacy", "transform-class-properties"]
+    presets: [
+      ["env", {
+      targets: {
+        "node": "current"
+      },
+      modules: "commonjs"
+      }]
+    ],
+    plugins: [
+      "transform-decorators-legacy", 
+      "transform-class-properties",
+      ]
   };
   return gulp.src('src/**/*.js')
     .pipe(plumber())

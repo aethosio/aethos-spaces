@@ -8,7 +8,7 @@ import { CollectionRegistry } from './collection-registry';
 let $zenSpacesInstance = null;
 
 export class ZenSpaces {
-  constructor() {
+  constructor(api) {
     if ($zenSpacesInstance) {
       throw new Error('Attempting to construct another ZenSpaces (should be a singleton!');
     }
@@ -16,7 +16,7 @@ export class ZenSpaces {
     this.connected = false;
     this.objectRefs = [];
     this.subscriptions = new Map();
-    this.api = ioChannel('/api/spaces');
+    this.api = api || ioChannel('/api/spaces');
     this.api.on('connect', () => {
       console.log('Connected to Zen Spaces');
       this.handShake().then(() => {
