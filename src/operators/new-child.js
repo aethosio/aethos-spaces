@@ -3,7 +3,7 @@ import { Operator } from './operator';
 
 export class NewChild extends Operator {
   constructor() {
-     super(...arguments);
+    super(...arguments);
   }
 
   execute() {
@@ -16,7 +16,7 @@ export class NewChild extends Operator {
         .whenClosed(response => {
           if (!response.wasCancelled) {
             // Copy the response into an event
-            let event = { eventType: this.action.eventTypeName, data: {} };
+            const event = { eventType: this.action.eventTypeName, data: {} };
             eventFactory.type.elements.forEach((element) => {
               event.data[element.name] = response.output[element.name];
             });

@@ -4,6 +4,7 @@
 export class Operator {
   /**
    * Normally this is created indirectly through `ActionFactory#create()` after registering actions and operators.
+   * @param viewModel view model object
    */
   constructor(viewModel) {
     this.viewModel = viewModel;
@@ -15,7 +16,7 @@ export class Operator {
   }
 
   /**
-   * @return Promise resovles to an event type.
+   * @returns {Promise} resovles to an event type.
    */
   getEventType() {
     // This is a little brittle and requires the owning action to be set by
