@@ -34,7 +34,8 @@ gulp.task('build-js', ['eslint'], function() {
     presets: [
       ["env", {
       targets: {
-        "node": "current"
+        "node": "current",
+        "browsers": ["last 2 versions"]
       },
       modules: "commonjs"
       }]

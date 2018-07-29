@@ -16,7 +16,7 @@ export class ZenSpaces {
     this.connected = false;
     this.objectRefs = [];
     this.subscriptions = new Map();
-    this.api = api || ioChannel('/api/spaces');
+    this.api = api || this.getAPI();
     this.api.on('connect', () => {
       console.log('Connected to Zen Spaces');
       this.handShake().then(() => {
@@ -39,6 +39,10 @@ export class ZenSpaces {
     this.typeRegistry = new TypeRegistry(this);
     this.actionFactory = new ActionFactory(this);
     this.collectionRegistry = new CollectionRegistry(this);
+  }
+
+  getAPI() {
+    return ioChannel('/api/spaces');
   }
 
   handShake() {
